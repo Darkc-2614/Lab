@@ -195,6 +195,7 @@ public class chat extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< Updated upstream
 
     private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
         String prpt = txtCaja.getText();
@@ -217,6 +218,66 @@ public class chat extends javax.swing.JFrame {
         }
         if (s) {
             Chat.setListData(chat);
+=======
+    public void enviar(String x){
+    String prpt = x;
+     // Obtiene el texto del usuario
+        if (prpt.equals("")) {
+            JOptionPane.showMessageDialog(null, "Entrada vacía, envía un mensaje o instrucción par E.V.A.","Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
+
+// Agrega mensaje del usuario y "pensando..." al arreglo chat
+            boolean s = false;
+            for (int i = 0; i < chat.length - 1; i += 2) {
+                if (chat[i] == null) {
+                    chat[i] = "Usuario: " + prpt;
+                    chat[i + 1] = mensajePensando; // Mensaje temporal
+                    txtCaja.setText(""); // Limpia la caja de texto del usuario
+                    s = true;
+                    break;
+                }
+            }
+
+            if (s) {
+                Chat.setListData(chat); // Actualiza la lista con el mensaje "pensando..."
+            }
+
+// Usa SwingWorker para realizar la llamada a la API en segundo plano
+            new SwingWorker<String, Void>() {
+                @Override
+                protected String doInBackground() {
+                    try {
+                        // Llama a la API de la IA y retorna la respuesta
+                        return ChatBotAPI.sendMessage(prpt);
+                    } catch (Exception ex) {
+                        Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
+                        return "Error al obtener respuesta"; // Mensaje en caso de error
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        String respuesta = get(); // Obtiene la respuesta de la IA
+
+                        // Reemplaza el mensaje "pensando..." con la respuesta real
+                        for (int i = 0; i < chat.length - 1; i += 2) {
+                            if (chat[i] != null && chat[i + 1].equals(mensajePensando)) {
+                                chat[i + 1] = "Bot: " + respuesta;
+                                break;
+                            }
+                        }
+
+                        // Actualiza la interfaz con la respuesta
+                        Chat.setListData(chat);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }.execute();
+>>>>>>> Stashed changes
         }
 
         /* Set the Nimbus look and feel */
@@ -224,6 +285,10 @@ public class chat extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+    }
+    private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
+        String mensaje = txtCaja.getText();
+        enviar(mensaje);
     }//GEN-LAST:event_enviarMouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
@@ -241,18 +306,22 @@ public class chat extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void hstrlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hstrlMouseClicked
-        indice = hstrl.getSelectedIndex();
+    public void historial(){
+    indice = hstrl.getSelectedIndex();
         for (int i = 0; i < chat.length - 1; i++) {
             chat[i] = historial[indice][i + 1];
         }
         Chat.setListData(chat);
-
+    }
+    private void hstrlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hstrlMouseClicked
+        historial();
     }//GEN-LAST:event_hstrlMouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        historial[c][0] = "Chat " + (c + 1);
+        hstrl();
+    }//GEN-LAST:event_jButton3MouseClicked
+    public void hstrl(){
+    historial[c][0] = "Chat " + (c + 1);
         for (int i = 0; i < chat.length - 1; i++) {
             if (chat[i] != null) {
                 historial[c][i + 1] = chat[i];
@@ -268,19 +337,20 @@ public class chat extends javax.swing.JFrame {
         }
         hstrl.setListData(in);
         Chat.setListData(chat);
-    }//GEN-LAST:event_jButton3MouseClicked
-
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        for (int i = 0; i < chat.length - 1; i++) {
+    public void nuevo(){
+    for (int i = 0; i < chat.length - 1; i++) {
             if (chat[i] != null) {
                 chat[i] = "";
             }
         }
         Chat.setListData(chat);
+    }
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        nuevo();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2MouseClicked
 
