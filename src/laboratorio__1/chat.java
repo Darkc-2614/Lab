@@ -49,7 +49,6 @@ public class chat extends javax.swing.JFrame {
          jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("out.png")));
          
     }
-
  
     
     /**
@@ -184,40 +183,39 @@ public class chat extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
-        String prpt = txtCaja.getText();
+    public void enviarMensaje(String x){
+        String prpt = x;
         String respuesta = null;
-        try {
-            respuesta = ChatBotAPI.sendMessage(prpt);
-        } catch (Exception ex) {
-            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        boolean s = false;
-        for (int i = 0; i < chat.length - 1; i += 2) {
-            if (chat[i] == null) {
-                chat[i] = "Usuario: " + prpt;
-                chat[i + 1] = "Bot: " + respuesta;
-                txtCaja.setText("");
-                s = true;
-                break;
+        if (prpt.equals("")){
+            JOptionPane.showMessageDialog(null, "Ha ingresado un mensaje vacío","ERROR_MESSAGE", JOptionPane.ERROR_MESSAGE);
+        }else{
+            try {
+                respuesta = ChatBotAPI.sendMessage(prpt);
+            } catch (Exception ex) {
+                Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
             }
+            boolean s = false;
+            for (int i = 0; i < chat.length - 1; i += 2) {
+                if (chat[i] == null) {
+                    chat[i] = "Usuario: " + prpt;
+                    chat[i + 1] = "Bot: " + respuesta;
+                    txtCaja.setText("");
+                    s = true;
+                    break;
+                }
 
+            }
+            if (s) {
+                Chat.setListData(chat);
+            }
         }
-        if (s) {
-            Chat.setListData(chat);
-        }
+    }
+    
+    private void enviarMouseClicked(java.awt.event.MouseEvent evt) {                                    
+        String x = txtCaja.getText();
+        enviarMensaje(x);
 
-       
-        
-        
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-    }//GEN-LAST:event_enviarMouseClicked
+    }
     
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         this.dispose();
@@ -244,7 +242,10 @@ public class chat extends javax.swing.JFrame {
         
     }//GEN-LAST:event_hstrlMouseClicked
 
-    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {
+        historial();
+    }
+    public void historial(){
         historial[c][0] = "Chat " + (c + 1);
         for (int i = 0; i < chat.length - 1; i++) {
             if (chat[i] != null) {
@@ -261,8 +262,7 @@ public class chat extends javax.swing.JFrame {
         }
         hstrl.setListData(in);
         Chat.setListData(chat);
-    }//GEN-LAST:event_jButton3MouseClicked
-
+    }
     /**
      * @param args the command line arguments
      * @throws java.net.MalformedURLException
