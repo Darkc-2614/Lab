@@ -9,7 +9,7 @@ Requerimientos previos para la instalación del proyecto:
 
 Sobre el uso del proyecto:
 
-01. clonar el proyecto y abrirlo en Apache NeatBeans.
+01. Descargar el proyecto.
 
 
 
