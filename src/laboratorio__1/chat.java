@@ -21,6 +21,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.json.JSONObject;
+import javax.swing.SwingWorker;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -194,31 +197,6 @@ public class chat extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-<<<<<<< Updated upstream
-
-    private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
-        String prpt = txtCaja.getText();
-        String respuesta = null;
-        try {
-            respuesta = ChatBotAPI.sendMessage(prpt);
-        } catch (Exception ex) {
-            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        boolean s = false;
-        for (int i = 0; i < chat.length - 1; i += 2) {
-            if (chat[i] == null) {
-                chat[i] = "Usuario: " + prpt;
-                chat[i + 1] = "Bot: " + respuesta;
-                txtCaja.setText("");
-                s = true;
-                break;
-            }
-
-        }
-        if (s) {
-            Chat.setListData(chat);
-=======
     public void enviar(String x){
     String prpt = x;
      // Obtiene el texto del usuario
@@ -238,6 +216,7 @@ public class chat extends javax.swing.JFrame {
                     break;
                 }
             }
+
 
             if (s) {
                 Chat.setListData(chat); // Actualiza la lista con el mensaje "pensando..."
@@ -277,7 +256,11 @@ public class chat extends javax.swing.JFrame {
                     }
                 }
             }.execute();
->>>>>>> Stashed changes
+
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Entrada vacía, envía un mensaje o instrucción par E.V.A.");
+
         }
 
         /* Set the Nimbus look and feel */
