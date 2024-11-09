@@ -256,13 +256,6 @@ public class chat extends javax.swing.JFrame {
                     }
                 }
             }.execute();
-
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Entrada vacía, envía un mensaje o instrucción par E.V.A.");
-
-        }
-
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
