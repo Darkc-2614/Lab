@@ -203,7 +203,7 @@ public class chat extends javax.swing.JFrame {
         if (prpt.equals("")) {
             JOptionPane.showMessageDialog(null, "Entrada vacía, envía un mensaje o instrucción para E.V.A.","Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
+            String mensajePensando = "Eva: Pensando..."; // Mensaje de espera
 
 // Agrega mensaje del usuario y "pensando..." al arreglo chat
             boolean s = false;
