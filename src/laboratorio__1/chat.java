@@ -201,7 +201,7 @@ public class chat extends javax.swing.JFrame {
     String prpt = x;
      // Obtiene el texto del usuario
         if (prpt.equals("")) {
-            JOptionPane.showMessageDialog(null, "Entrada vacía, envía un mensaje o instrucción par E.V.A.","Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Entrada vacía, envía un mensaje o instrucción para E.V.A.","Error", JOptionPane.ERROR_MESSAGE);
         } else {
             String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
 
@@ -243,7 +243,7 @@ public class chat extends javax.swing.JFrame {
                         // Reemplaza el mensaje "pensando..." con la respuesta real
                         for (int i = 0; i < chat.length - 1; i += 2) {
                             if (chat[i] != null && chat[i + 1].equals(mensajePensando)) {
-                                chat[i + 1] = "Bot: " + respuesta;
+                                chat[i + 1] = "Eva: " + respuesta;
                                 break;
                             }
                         }
@@ -256,6 +256,8 @@ public class chat extends javax.swing.JFrame {
                     }
                 }
             }.execute();
+        }
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
