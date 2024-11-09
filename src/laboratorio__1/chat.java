@@ -21,20 +21,22 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.json.JSONObject;
+import javax.swing.SwingWorker;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author isabc
  */
-
-
 public class chat extends javax.swing.JFrame {
+
     int c;
     int indice;
     String historial[][];
     String chat[];
     String in[];
-    
+
     /**
      * Creates new form chat
      */
@@ -45,13 +47,11 @@ public class chat extends javax.swing.JFrame {
         in = new String[9999];
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("bot.png")).getImage());
-         enviar.setIcon(new javax.swing.ImageIcon(getClass().getResource("send.png")));
-         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("out.png")));
-         
+        enviar.setIcon(new javax.swing.ImageIcon(getClass().getResource("send.png")));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("out.png")));
+
     }
 
- 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -184,41 +184,78 @@ public class chat extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+
     private void enviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseClicked
+
         String prpt = txtCaja.getText();
-        String respuesta = null;
-        try {
-            respuesta = ChatBotAPI.sendMessage(prpt);
-        } catch (Exception ex) {
-            Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        boolean s = false;
-        for (int i = 0; i < chat.length - 1; i += 2) {
-            if (chat[i] == null) {
-                chat[i] = "Usuario: " + prpt;
-                chat[i + 1] = "Bot: " + respuesta;
-                txtCaja.setText("");
-                s = true;
-                break;
+        // Obtiene el texto del usuario
+        if (prpt != null) {
+            String mensajePensando = "Bot: Pensando..."; // Mensaje de espera
+
+// Agrega mensaje del usuario y "pensando..." al arreglo chat
+            boolean s = false;
+            for (int i = 0; i < chat.length - 1; i += 2) {
+                if (chat[i] == null) {
+                    chat[i] = "Usuario: " + prpt;
+                    chat[i + 1] = mensajePensando; // Mensaje temporal
+                    txtCaja.setText(""); // Limpia la caja de texto del usuario
+                    s = true;
+                    break;
+                }
             }
 
-        }
-        if (s) {
-            Chat.setListData(chat);
+            if (s) {
+                Chat.setListData(chat); // Actualiza la lista con el mensaje "pensando..."
+            }
+
+// Usa SwingWorker para realizar la llamada a la API en segundo plano
+            new SwingWorker<String, Void>() {
+                @Override
+                protected String doInBackground() {
+                    try {
+                        // Llama a la API de la IA y retorna la respuesta
+                        return ChatBotAPI.sendMessage(prpt);
+                    } catch (Exception ex) {
+                        Logger.getLogger(chat.class.getName()).log(Level.SEVERE, null, ex);
+                        return "Error al obtener respuesta"; // Mensaje en caso de error
+                    }
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        String respuesta = get(); // Obtiene la respuesta de la IA
+
+                        // Reemplaza el mensaje "pensando..." con la respuesta real
+                        for (int i = 0; i < chat.length - 1; i += 2) {
+                            if (chat[i] != null && chat[i + 1].equals(mensajePensando)) {
+                                chat[i + 1] = "Bot: " + respuesta;
+                                break;
+                            }
+                        }
+
+                        // Actualiza la interfaz con la respuesta
+                        Chat.setListData(chat);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }.execute();
+            
+        } else {
+            if (txtCaja.getText() == " ") {
+                JOptionPane.showMessageDialog(null, "Caja de texto vacía, ingresa una pregunta o instrucción para E.V.A.");
+            }
         }
 
-       
-        
-        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
     }//GEN-LAST:event_enviarMouseClicked
-    
+
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
@@ -237,11 +274,11 @@ public class chat extends javax.swing.JFrame {
 
     private void hstrlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hstrlMouseClicked
         indice = hstrl.getSelectedIndex();
-        for (int i = 0; i < chat.length-1; i++) {
-            chat[i] = historial[indice][i+1];
+        for (int i = 0; i < chat.length - 1; i++) {
+            chat[i] = historial[indice][i + 1];
         }
         Chat.setListData(chat);
-        
+
     }//GEN-LAST:event_hstrlMouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
@@ -268,7 +305,7 @@ public class chat extends javax.swing.JFrame {
      * @throws java.net.MalformedURLException
      */
     public static void main(String args[]) {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -285,7 +322,7 @@ public class chat extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(chat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
